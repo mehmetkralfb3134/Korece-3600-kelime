@@ -325,6 +325,338 @@
       transform: scale(1.1);
     }
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Korece Öğren – 3600 Cümle + Kelimeler</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app {
+      flex: 1;
+      width: 100%;
+      background: white;
+      padding: 16px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+      letter-spacing: -0.3px;
+    }
+
+    .header .sub {
+      font-size: 14px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: transparent;
+      border: none;
+      min-width: 70px;
+    }
+
+    .tab.active {
+      background: white;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .tab:hover {
+      color: #0f172a;
+    }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 4px 4px 18px;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .search-wrap input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 12px 0;
+      font-size: 15px;
+      outline: none;
+      color: #0f172a;
+    }
+
+    .search-wrap input::placeholder {
+      color: #94a3b8;
+    }
+
+    .mic-btn {
+      background: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: 0.2s;
+      color: #1e293b;
+    }
+
+    .mic-btn.listening {
+      background: #ef4444;
+      color: white;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .add-area {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 40px;
+      align-items: center;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .add-area input {
+      flex: 1 1 120px;
+      border: none;
+      background: transparent;
+      padding: 10px 0;
+      font-size: 14px;
+      outline: none;
+      color: #0f172a;
+      min-width: 80px;
+    }
+
+    .add-area input::placeholder {
+      color: #94a3b8;
+    }
+
+    .add-area button {
+      background: #0f172a;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+
+    .add-area button:hover {
+      background: #1e293b;
+    }
+
+    .tts-settings {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      background: #f8fafc;
+      padding: 10px 16px;
+      border-radius: 40px;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .tts-settings label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1 1 180px;
+    }
+
+    .tts-settings input[type="range"] {
+      flex: 1;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 0 10px;
+      height: 4px;
+      accent-color: #0f172a;
+      cursor: pointer;
+      min-width: 100px;
+    }
+
+    .tts-settings .rate-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .card-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 8px;
+      min-height: 0; /* flex override */
+    }
+
+    .card-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .card-list::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+      border: 1px solid #f1f5f9;
+      transition: 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .card:hover {
+      border-color: #e2e8f0;
+      background: #fafcff;
+    }
+
+    .kr-line,
+    .tr-line,
+    .word-item {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      color: #0f172a;
+      letter-spacing: -0.2px;
+      padding: 2px 0;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      border-radius: 4px;
+    }
+
+    .tr-line {
+      font-weight: 400;
+      font-size: 15px;
+      color: #475569;
+    }
+
+    .word-item {
+      font-weight: 500;
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .kr-line.speaking,
+    .tr-line.speaking,
+    .word-item.speaking {
+      color: #22c55e;
+    }
+
+    .kr-line:hover,
+    .tr-line:hover,
+    .word-item:hover {
+      background: #f1f5f9;
+    }
+
+    .card .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .card .code {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      letter-spacing: 0.3px;
+    }
+
+    .card .star {
+      font-size: 22px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: 0.2s;
+      background: none;
+      border: none;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    .card .star.favorited {
+      color: #f59e0b;
+    }
+
+    .card .star:hover {
+      transform: scale(1.1);
+    }
+
     .card .delete-btn {
       background: none;
       border: none;
@@ -347,10 +679,13 @@
     }
 
     .youtube-link {
-      margin-top: 24px;
+      margin-top: 8px;
       text-align: center;
       font-size: 14px;
       color: #94a3b8;
+      flex-shrink: 0;
+      padding: 8px 0 4px;
+      border-top: 1px solid #f1f5f9;
     }
 
     .youtube-link a {
@@ -373,7 +708,7 @@
 
     @media (max-width: 400px) {
       .app {
-        padding: 16px;
+        padding: 12px 14px 20px;
       }
       .header h1 {
         font-size: 20px;
@@ -437,12 +772,18 @@
   <div class="card-list" id="cardList"></div>
 
   <div class="youtube-link">
-    <a href=https://youtube.com/@koreceogren1?si=gv71auFJIJyf6VZetarget="_blank">📺 YouTube kanalımıza abone olun</a>
+    <a href="https://youtube.com/@koreceogren1?si=gv71auFJIJyf6VZe" target="_blank">📺 YouTube kanalımıza abone olun</a>
     <span class="sub-text">Uygulamamıza destek verebilirsiniz</span>
   </div>
 </div>
 
 <script>
+  // (Buraya mevcut JavaScript kodunuzu ekleyin – ben sadece CSS'i tam ekran yaptım)
+  // Örnek olarak boş bir script bırakıyorum; siz kendi işlevselliğinizi ekleyebilirsiniz.
+  console.log('Uygulama tam ekran görünümde çalışıyor.');
+</script>
+</body>
+</html>
   // ---------- 3600 CÜMLE (örnek olarak 3, gerçekte 3600) ----------
   const SENTENCES_RAW = [
   { id: "1", kr: "–물 한 잔 주세요.\n–여기 있습니다.", tr: "–Bir bardak su lütfen.\n–Buyurun.", favorite: false },
